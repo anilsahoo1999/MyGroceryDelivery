@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".activity.OnBoardingActivity">
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/viewPager"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:clipToPadding="true"
+            android:overScrollMode="never"
+            app:layout_constraintBottom_toTopOf="@+id/constraint1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="70dp"
+            android:layout_height="35dp"
+            android:text="@string/skip"
+            android:textSize="11sp"
+            android:textAllCaps="false"
+            android:gravity="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:fontFamily="@font/regular"
+            android:id="@+id/btnSkip"
+            android:textColor="@color/dark_blue"
+            android:background="@drawable/btn_grey_complete_rounded_selector"
+            app:backgroundTint="@null"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraint1"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/viewPager">
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/pageIndicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                app:tabGravity="center"
+                app:tabIndicatorHeight="0dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tabBackground="@drawable/onboarding_viewpager_selector" />
+
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_previous_step"
+                android:layout_width="90dp"
+                android:layout_height="50dp"
+                android:backgroundTint="@null"
+                app:backgroundTint="@null"
+                android:background="@drawable/btn_grey_rounded_selector"
+                android:text="@string/back"
+                android:textAllCaps="true"
+                android:fontFamily="@font/regular"
+                android:layout_marginBottom="20dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:textColor="@color/dark_blue" />
+
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_next_step"
+                android:layout_width="90dp"
+                android:layout_height="50dp"
+                android:text="@string/next"
+                android:textAllCaps="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginBottom="20dp"
+                android:fontFamily="@font/regular"
+                android:textColor="@color/md_white_1000"
+                app:backgroundTint="@null"
+                android:background="@drawable/btn_orange_rounded_selector" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

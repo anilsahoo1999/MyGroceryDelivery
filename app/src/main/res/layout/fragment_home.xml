@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <!--    <RelativeLayout-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="match_parent"-->
+    <!--        tools:context=".fragment.HomeFragment">-->
+
+    <!--        <com.google.android.material.appbar.AppBarLayout-->
+    <!--            android:id="@+id/appBarLayout"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="wrap_content">-->
+
+    <!--            <com.google.android.material.appbar.MaterialToolbar-->
+    <!--                android:layout_width="match_parent"-->
+    <!--                android:layout_height="match_parent"-->
+    <!--                android:background="@color/white"-->
+    <!--                android:contentInsetStart="0dp"-->
+    <!--                app:contentInsetLeft="0dp"-->
+    <!--                app:contentInsetStart="0dp"-->
+    <!--                app:contentInsetStartWithNavigation="0dp">-->
+
+    <!--                <RelativeLayout-->
+    <!--                    android:layout_width="match_parent"-->
+    <!--                    android:layout_height="match_parent"-->
+    <!--                    android:layout_gravity="center_vertical"-->
+    <!--                    android:orientation="vertical">-->
+
+    <!--                    <TextView-->
+    <!--                        android:id="@+id/txtLocation"-->
+    <!--                        android:layout_width="match_parent"-->
+    <!--                        android:layout_height="wrap_content"-->
+    <!--                        android:layout_alignParentStart="true"-->
+    <!--                        android:layout_alignParentEnd="true"-->
+    <!--                        android:layout_marginTop="5dp"-->
+    <!--                        android:drawablePadding="10dp"-->
+    <!--                        android:fontFamily="@font/bold"-->
+    <!--                        android:maxLines="1"-->
+    <!--                        android:padding="10dp"-->
+    <!--                        android:text="@string/app_name"-->
+    <!--                        android:textColor="@color/black"-->
+    <!--                        android:textSize="13sp"-->
+    <!--                        app:drawableStartCompat="@drawable/ic_baseline_location"-->
+    <!--                        />-->
+
+    <!--                    <TextView-->
+    <!--                        android:layout_width="match_parent"-->
+    <!--                        android:layout_height="wrap_content"-->
+    <!--                        android:layout_below="@+id/txtLocation"-->
+    <!--                        android:layout_marginHorizontal="10dp"-->
+    <!--                        android:layout_marginBottom="10dp"-->
+    <!--                        android:background="@drawable/search_view_background"-->
+    <!--                        android:drawablePadding="10dp"-->
+    <!--                        android:fontFamily="@font/montserrat_regular"-->
+    <!--                        android:gravity="center_vertical"-->
+    <!--                        android:hint="@string/search"-->
+    <!--                        android:padding="8dp"-->
+    <!--                        android:textSize="13sp"-->
+    <!--                        app:drawableStartCompat="@drawable/ic_round_search"-->
+    <!--                        app:drawableTint="@color/grey" />-->
+
+    <!--                </RelativeLayout>-->
+
+    <!--            </com.google.android.material.appbar.MaterialToolbar>-->
+
+    <!--        </com.google.android.material.appbar.AppBarLayout>-->
+
+    <!--        &lt;!&ndash;            <com.google.android.material.tabs.TabLayout&ndash;&gt;-->
+    <!--        &lt;!&ndash;                android:id="@+id/tabLayout"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                android:layout_width="match_parent"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                android:layout_height="wrap_content"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                android:layout_centerHorizontal="true"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                android:layout_marginTop="5dp"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                android:background="#00FFFFFF"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                android:textAlignment="center"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                app:tabIndicatorColor="@color/sky"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                app:tabIndicatorGravity="center"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                app:tabTextColor="@color/white" />&ndash;&gt;-->
+
+    <!--        &lt;!&ndash;            <androidx.viewpager2.widget.ViewPager2&ndash;&gt;-->
+    <!--        &lt;!&ndash;                android:id="@+id/viewpager"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                android:layout_width="match_parent"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                android:layout_height="match_parent"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                android:layout_below="@+id/tabLayout"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                android:layout_centerHorizontal="true"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                android:layout_centerVertical="true" />&ndash;&gt;-->
+
+    <!--        <com.google.android.material.card.MaterialCardView-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="150dp"-->
+    <!--            android:layout_below="@+id/appBarLayout"-->
+    <!--            android:layout_marginStart="10dp"-->
+    <!--            android:layout_marginTop="10dp"-->
+    <!--            android:layout_marginEnd="10dp"-->
+    <!--            app:cardCornerRadius="5dp"-->
+    <!--            app:cardElevation="5dp" >-->
+    <!--            <RelativeLayout-->
+    <!--                android:layout_width="match_parent"-->
+    <!--                android:layout_height="match_parent"-->
+    <!--                android:orientation = "vertical">-->
+    <!--                <androidx.viewpager2.widget.ViewPager2-->
+    <!--                    android:layout_width="match_parent"-->
+    <!--                    android:layout_height="match_parent"-->
+    <!--                    android:id="@+id/bannerViewPager"/>-->
+    <!--                <com.tbuonomo.viewpagerdotsindicator.WormDotsIndicator-->
+    <!--                    android:id="@+id/worm_dots_indicator"-->
+    <!--                    android:layout_width="wrap_content"-->
+    <!--                    android:layout_height="wrap_content"-->
+    <!--                    android:layout_alignParentBottom="true"-->
+    <!--                    android:layout_centerHorizontal="true"-->
+    <!--                    android:layout_marginBottom="10dp"-->
+    <!--                    app:dotsColor="#FDFDFD"-->
+    <!--                    app:dotsCornerRadius="8dp"-->
+    <!--                    app:dotsSize="10dp"-->
+    <!--                    app:dotsSpacing="4dp"-->
+    <!--                    app:dotsStrokeColor="#000000"-->
+    <!--                    app:dotsStrokeWidth="1dp" />-->
+    <!--            </RelativeLayout>-->
+
+    <!--        </com.google.android.material.card.MaterialCardView>-->
+
+    <!--    </RelativeLayout>-->
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/txtUserName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/regular"
+                android:text="Hi, Anil!"
+                android:textColor="@color/black"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/txtWhatBuyToday"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/regular"
+                android:text="@string/what_would_you_buy_today"
+                android:textColor="@color/md_grey_600"
+                android:textSize="13sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txtUserName" />
+
+            <ImageButton
+                android:id="@+id/btnCart"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/rectangular_green_background"
+                android:backgroundTint="@null"
+                android:padding="10dp"
+                android:src="@drawable/ic_round_shopping_cart_24"
+                app:layout_constraintBottom_toBottomOf="@+id/txtWhatBuyToday"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/txtUserName"
+                app:tint="@color/white" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/txtSearchBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/search_view_background"
+                android:drawableStart="@drawable/ic_round_search"
+                android:drawablePadding="10dp"
+                android:drawableTint="@color/black"
+                android:fontFamily="@font/regular"
+                android:gravity="center_vertical"
+                android:padding="13dp"
+                android:text="Search by item name"
+                app:layout_constraintTop_toBottomOf="@+id/txtWhatBuyToday" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="140dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txtSearchBar"
+                android:layout_marginTop="10dp"
+                android:id="@+id/card1"
+                android:layout_marginHorizontal="20dp"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="2dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <androidx.viewpager2.widget.ViewPager2
+                        android:id="@+id/bannerViewPager"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
+                    <com.tbuonomo.viewpagerdotsindicator.WormDotsIndicator
+                        android:id="@+id/worm_dots_indicator"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        app:dotsColor="@color/md_green_500"
+                        app:dotsCornerRadius="10dp"
+                        app:dotsSize="10dp"
+                        app:dotsSpacing="3dp"
+                        android:layout_marginBottom="10dp"
+                        app:dotsStrokeColor="@color/white"
+                        app:dotsStrokeWidth="1dp" />
+                </RelativeLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Categories"
+                android:textSize="15sp"
+                android:fontFamily="@font/regular"
+                android:textColor="@color/black"
+                app:layout_constraintTop_toBottomOf="@+id/card1"
+                android:layout_marginTop="20dp"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="20dp"
+                android:id="@+id/txtCategories"/>
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="See All"
+                android:textSize="13sp"
+                android:fontFamily="@font/regular"
+                android:textColor="@color/md_grey_600"
+                app:layout_constraintTop_toTopOf="@+id/txtCategories"
+                app:layout_constraintBottom_toBottomOf="@+id/txtCategories"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="20dp"
+                android:layout_marginStart="20dp"
+                android:id="@+id/txtCategoriesSeeAll"/>
+
+            <com.facebook.shimmer.ShimmerFrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:id="@+id/categoryShimmer"
+                android:visibility="visible"
+                app:layout_constraintTop_toBottomOf="@+id/txtCategories"
+                android:layout_marginHorizontal="20dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <include layout="@layout/category_item_loader"/>
+                    <include layout="@layout/category_item_loader"/>
+                    <include layout="@layout/category_item_loader"/>
+                    <include layout="@layout/category_item_loader"/>
+                </LinearLayout>
+            </com.facebook.shimmer.ShimmerFrameLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/txtCategories"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal"
+                android:visibility="invisible"
+                tools:listitem="@layout/category_item_layout"
+                android:layout_marginHorizontal="20dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                android:id="@+id/recyclerCategory"/>
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Best Sellers"
+                android:textSize="15sp"
+                android:fontFamily="@font/regular"
+                android:textColor="@color/black"
+                app:layout_constraintTop_toBottomOf="@+id/categoryShimmer"
+                android:layout_marginTop="20dp"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="20dp"
+                android:id="@+id/txtBestSellers"/>
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="See All"
+                android:textSize="13sp"
+                android:fontFamily="@font/regular"
+                android:textColor="@color/md_grey_600"
+                app:layout_constraintTop_toTopOf="@+id/txtBestSellers"
+                app:layout_constraintBottom_toBottomOf="@+id/txtBestSellers"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="20dp"
+                android:layout_marginStart="20dp"
+                android:id="@+id/txtBestSellerSeeAll"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/txtBestSellers"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal"
+                android:layout_marginHorizontal="20dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                android:id="@+id/recyclerBestSeller"/>
+
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+</layout>
