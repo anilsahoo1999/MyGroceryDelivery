@@ -164,6 +164,33 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/txtUserName" />
 
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:padding="5dp"
+                android:layout_marginStart="10dp"
+                android:id="@+id/imageLocation"
+                android:src="@drawable/ic_outline_location_on_24"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txtWhatBuyToday"
+                app:tint="@color/md_green_600" />
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/txtYourLocation"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:padding="5dp"
+                android:fontFamily="@font/regular"
+                android:layout_marginEnd="20dp"
+                android:text="Add Address"
+                android:textColor="@color/md_grey_600"
+                android:textSize="13sp"
+                android:ellipsize="end"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/imageLocation"
+                app:layout_constraintStart_toEndOf="@id/imageLocation"
+                app:layout_constraintBottom_toBottomOf="@id/imageLocation" />
+
             <ImageButton
                 android:id="@+id/btnCart"
                 android:layout_width="40dp"
@@ -183,7 +210,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="20dp"
                 android:background="@drawable/search_view_background"
                 android:drawableStart="@drawable/ic_round_search"
                 android:drawablePadding="10dp"
@@ -192,7 +219,7 @@
                 android:gravity="center_vertical"
                 android:padding="13dp"
                 android:text="Search by item name"
-                app:layout_constraintTop_toBottomOf="@+id/txtWhatBuyToday" />
+                app:layout_constraintTop_toBottomOf="@+id/txtYourLocation" />
 
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
@@ -237,7 +264,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Categories"
-                android:textSize="15sp"
+                android:textSize="17sp"
+                android:padding="5dp"
+                android:textStyle="bold"
                 android:fontFamily="@font/regular"
                 android:textColor="@color/black"
                 app:layout_constraintTop_toBottomOf="@+id/card1"
@@ -251,7 +280,7 @@
                 android:text="See All"
                 android:textSize="13sp"
                 android:fontFamily="@font/regular"
-                android:textColor="@color/md_grey_600"
+                android:textColor="@color/md_green_600"
                 app:layout_constraintTop_toTopOf="@+id/txtCategories"
                 app:layout_constraintBottom_toBottomOf="@+id/txtCategories"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -299,9 +328,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Best Sellers"
-                android:textSize="15sp"
+                android:textSize="17sp"
                 android:fontFamily="@font/regular"
                 android:textColor="@color/black"
+                android:padding="5dp"
+                android:textStyle="bold"
                 app:layout_constraintTop_toBottomOf="@+id/categoryShimmer"
                 android:layout_marginTop="20dp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -313,7 +344,7 @@
                 android:text="See All"
                 android:textSize="13sp"
                 android:fontFamily="@font/regular"
-                android:textColor="@color/md_grey_600"
+                android:textColor="@color/md_green_600"
                 app:layout_constraintTop_toTopOf="@+id/txtBestSellers"
                 app:layout_constraintBottom_toBottomOf="@+id/txtBestSellers"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -326,13 +357,70 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@+id/txtBestSellers"
                 android:layout_marginTop="5dp"
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:layout_marginHorizontal="20dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/product_list_item"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                app:spanCount="2"
+                android:visibility="gone"
                 android:id="@+id/recyclerBestSeller"/>
+            <com.facebook.shimmer.ShimmerFrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:id="@+id/productShimmer"
+                android:visibility="visible"
+                app:layout_constraintTop_toBottomOf="@+id/txtBestSellers"
+                >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginHorizontal="20dp"
+                android:id="@+id/productLoaderLayout"
+                app:layout_constraintTop_toBottomOf="@+id/txtBestSellers"
+                android:orientation="vertical">
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:orientation="horizontal">
+                    <include android:layout_weight="1"
+                        layout="@layout/product_item_loader"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent" />
+                    <include android:layout_weight="1"
+                        layout="@layout/product_item_loader"
+                        android:layout_width="0dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_height="match_parent" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+                    <include android:layout_weight="1"
+                        layout="@layout/product_item_loader"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent" />
+                    <include android:layout_weight="1"
+                        layout="@layout/product_item_loader"
+                        android:layout_width="0dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_height="match_parent" />
+                </LinearLayout>
+
+            </LinearLayout>
+            </com.facebook.shimmer.ShimmerFrameLayout>
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

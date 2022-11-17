@@ -1,10 +1,13 @@
 package com.aks.mygrocery.fragment
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.graphics.Rect
+import android.location.Address
 import android.location.Geocoder
 import android.location.Location
 import android.location.LocationManager
@@ -12,22 +15,37 @@ import android.os.Bundle
 import android.os.CountDownTimer
 import android.provider.Settings
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.widget.Button
+import android.widget.ImageButton
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.aks.mygrocery.R
 import com.aks.mygrocery.adapter.BannerAdapter
 import com.aks.mygrocery.adapter.CategoryAdapter
+import com.aks.mygrocery.adapter.PriceAdapter
+import com.aks.mygrocery.adapter.ProductAdapter
 import com.aks.mygrocery.app.MyGroceryApp
 import com.aks.mygrocery.base.BaseFragment
 import com.aks.mygrocery.databinding.FragmentHomeBinding
 import com.aks.mygrocery.models.BannerModel
 import com.aks.mygrocery.models.CategoryModel
+import com.aks.mygrocery.models.ProductModel
+import com.aks.mygrocery.utils.Constants
 import com.aks.mygrocery.utils.HorizontalMarginItemDecoration
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.lang.Math.abs
 import java.util.*
 import kotlin.collections.ArrayList
@@ -42,7 +60,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     private lateinit var geocoder: Geocoder
     private lateinit var bannerAdapter: BannerAdapter
     private lateinit var categoryAdapter: CategoryAdapter
+    private lateinit var productAdapter: ProductAdapter
+    private lateinit var priceAdapter: PriceAdapter
     private var categoryList: List<CategoryModel>? = null
+    private var productList: List<ProductModel>? = null
     private var colorList: ArrayList<Int>? = null
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -50,15 +71,20 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         initializeView()
 
 
-
     }
 
+    @SuppressLint("SetTextI18n")
     private fun initializeView() {
 
         fusedLocationProvider = LocationServices.getFusedLocationProviderClient(requireActivity())
         geocoder = Geocoder(requireActivity(), Locale.getDefault())
 
         getCurrentLocation()
+        binding.txtYourLocation.setOnClickListener {
+            getCurrentLocation()
+        }
+        productAdapter = ProductAdapter()
+        priceAdapter = PriceAdapter()
 
         val arrayList = ArrayList<BannerModel>()
         colorList = arrayListOf()
@@ -72,20 +98,20 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         repeat(2) {
             arrayList.add(
                 BannerModel(
-                    "https://www.thoughtco.com/thmb/gtl-IotmuSFI9Li_8OJtaPXGrms=/2592x2592/smart/filters:no_upscale()/89538987-56a1316f3df78cf772684961.jpg",
+                    "https://thumbs.dreamstime.com/b/grocery-food-store-shopping-basket-promotional-sale-banner-vector-illustration-198422214.jpg",
                     "rose3"
                 )
             )
             arrayList.add(
                 BannerModel(
-                    "https://www.floraqueen.com/blog/wp-content/uploads/2020/02/shutterstock_552296878.jpg",
+                    "https://img.freepik.com/free-vector/hand-drawn-vegetables-supermarket-twitch-banner_23-2149385524.jpg?w=2000",
                     "rose2"
                 )
             )
 
             arrayList.add(
                 BannerModel(
-                    "https://www.thoughtco.com/thmb/gtl-IotmuSFI9Li_8OJtaPXGrms=/2592x2592/smart/filters:no_upscale()/89538987-56a1316f3df78cf772684961.jpg",
+                    "https://i.pinimg.com/736x/b2/55/36/b2553644b73d017c262daeb19bcdcee5.jpg",
                     "rose3"
                 )
             )
@@ -111,6 +137,69 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
 //        binding.bannerViewPager.addItemDecoration(itemDecoration)
         autoScrollPosition()
         getAllCategory()
+        getAllProduct()
+
+        productAdapter.onItemClickListener { productModel, i ->
+            //open price list bottom sheet dialog
+
+            val bottomSheetDialog = BottomSheetDialog(requireActivity(), R.style.TransparentDialog)
+            val view =
+                LayoutInflater.from(requireContext()).inflate(R.layout.layout_add_to_cart, null)
+            bottomSheetDialog.setContentView(view)
+            bottomSheetDialog.setCancelable(false)
+            bottomSheetDialog.setCanceledOnTouchOutside(true)
+            val textProductName: TextView = view.findViewById(R.id.txtProductName)
+            val recyclerView: RecyclerView = view.findViewById(R.id.recyclerPrice)
+            val btnAdd: ImageButton = view.findViewById(R.id.btnAdd)
+            val btnRemove: ImageButton = view.findViewById(R.id.btnRemove)
+            val btnAddToCart: Button = view.findViewById(R.id.btnAddToCart)
+            val txtQuantity: TextView = view.findViewById(R.id.txtQuantity)
+            val txtPriceDescription: TextView = view.findViewById(R.id.txtPriceDescription)
+
+            textProductName.text = productModel.name
+            recyclerView.adapter = priceAdapter
+            priceAdapter.checkedPosition = -1
+            priceAdapter.differ.submitList(productModel.priceList)
+
+            priceAdapter.onItemClickListener { pricePerKgModel, i ->
+                txtPriceDescription.visibility = View.VISIBLE
+                if (pricePerKgModel.gram == "Unit") {
+                    txtPriceDescription.text = "Per Unit Price"
+                } else {
+                    txtPriceDescription.text = "Quantity ${pricePerKgModel.gram}"
+                }
+            }
+
+            btnAdd.setOnClickListener {
+                if (txtQuantity.text.toString().toInt()<=9) {
+                    txtQuantity.text = (txtQuantity.text.toString().toInt() + 1).toString()
+                    btnAddToCart.isEnabled = true
+                    btnRemove.isEnabled = true
+                    btnAddToCart.setBackgroundColor(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            R.color.md_green_500
+                        )
+                    )
+                    btnRemove.setBackgroundResource(R.drawable.red_circle)
+                }else{
+                    Toast.makeText(requireContext(),"Maximum Item per order is 10",Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            btnRemove.setOnClickListener {
+                if (txtQuantity.text.toString().toInt()>0){
+                    if (txtQuantity.text.toString().toInt() == 1){
+                        btnRemove.isEnabled = false
+                        btnAddToCart.isEnabled = false
+                        btnRemove.setBackgroundResource(R.drawable.grey_circle)
+                        btnAddToCart.setBackgroundColor(ContextCompat.getColor(requireContext(),R.color.md_grey_400))
+                    }
+                    txtQuantity.text = (txtQuantity.text.toString().toInt() - 1).toString()
+                }
+            }
+            bottomSheetDialog.show()
+        }
     }
 
     private val countDownTimer = object : CountDownTimer(2000, 1000) {
@@ -183,9 +272,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         }
     }
 
-    private fun getAddressFromLocation(location: Location) {
+    private fun getAddressFromLocation(location: Location?) {
 
-        val address = geocoder.getFromLocation(location.latitude, location.longitude, 1)
+        val address: List<Address>? =
+            location?.let { geocoder.getFromLocation(it.latitude, it.longitude, 1) }
 
         if (address != null && address.isNotEmpty()) {
             val currentAddress = address[0].getAddressLine(0)
@@ -195,7 +285,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
             val postalCode = address[0].postalCode
             val knownName = address[0].featureName
 
-//            binding.txtLocation.text = currentAddress
+            binding.txtYourLocation.text = currentAddress
         }
 
     }
@@ -258,6 +348,36 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
                     binding.recyclerCategory.adapter = categoryAdapter
                 }
             }.addOnFailureListener {
+                Toast.makeText(requireContext(), it.message.toString(), Toast.LENGTH_SHORT).show()
+            }
+    }
+
+    private fun getAllProduct() {
+        binding.productShimmer.startShimmer()
+        val firebaseDb = MyGroceryApp.instance.firebaseFirestore
+        firebaseDb.collection("AdminMasterDetails")
+            .document("bcI5ARwAoHMLLQGdIXlHILEnlZ63")
+            .collection("ProductList")
+//            .whereEqualTo("sellingFast", true)
+//            .whereEqualTo("productOutOfStock",false)
+            .get().addOnSuccessListener { documentSnapshot ->
+
+                productList = arrayListOf()
+                productList = documentSnapshot.toObjects(ProductModel::class.java)
+                Constants.productList =
+                    productList as ArrayList<ProductModel> /* = java.util.ArrayList<com.aks.mygrocery.models.ProductModel> */
+                if (productList?.size!! > 0) {
+                    binding.productShimmer.stopShimmer()
+                    productAdapter.differ.submitList(productList)
+                    binding.productShimmer.visibility = View.GONE
+                    binding.recyclerBestSeller.visibility = View.VISIBLE
+                    binding.recyclerBestSeller.adapter = productAdapter
+
+
+                }
+            }.addOnFailureListener {
+                binding.productShimmer.stopShimmer()
+                binding.productShimmer.visibility = View.GONE
                 Toast.makeText(requireContext(), it.message.toString(), Toast.LENGTH_SHORT).show()
             }
     }

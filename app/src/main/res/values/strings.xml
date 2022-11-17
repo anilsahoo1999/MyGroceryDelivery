@@ -25,4 +25,9 @@
     <string name="title3">Speedy Doorstep Delivery</string>
     <string name="description3">Guaranteed same day delivery in groceries in your area, you can pay on delivery! </string>
     <string name="what_would_you_buy_today">What would you buy today?</string>
+    <string name="address_book">Address Book</string>
+    <string name="your_orders">Your Orders</string>
+    <string name="favorite_products">Favorite Products</string>
+    <string name="choose_language">Choose Language</string>
+    <string name="available_price">Available Price</string>
 </resources>

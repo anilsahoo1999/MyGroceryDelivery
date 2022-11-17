@@ -26,8 +26,8 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>() {
     private fun initializeView() {
 
         sharedPreference = SharedPreference(requireActivity())
-        binding.txtName.text = sharedPreference.fetchDetailsFromSharedPref(Constants.USERNAME)
-        binding.txtEmail.text = sharedPreference.fetchDetailsFromSharedPref(Constants.USER_MAIL_ID)
+        binding.txtProfileName.text = sharedPreference.fetchDetailsFromSharedPref(Constants.USERNAME)
+        binding.txtProfileEmail.text = sharedPreference.fetchDetailsFromSharedPref(Constants.USER_MAIL_ID)
 
         Glide.with(binding.profileImage.context)
             .load(sharedPreference.fetchDetailsFromSharedPref(Constants.PROFILE_LINK))

@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="200dp"
+        android:background="@drawable/bottomsheet_background"
+        >
+
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="17sp"
+            android:text="@string/app_name"
+            android:fontFamily="@font/regular"
+            android:textColor="@color/dark_blue"
+            android:textStyle="bold"
+            android:id="@+id/txtProductName"
+            android:padding="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/available_price"
+            android:textSize="13sp"
+            android:fontFamily="@font/regular"
+            android:textColor="@color/dark_blue"
+            android:textStyle="bold"
+            android:id="@+id/txtAvailablePrice"
+            android:padding="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtProductName"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/recyclerPrice"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:spanCount="3"
+            tools:listitem="@layout/layout_price_view"
+            app:layout_constraintTop_toBottomOf="@+id/txtAvailablePrice"
+            android:layout_marginHorizontal="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/recyclerPrice"
+            android:text="@string/app_name"
+            android:layout_marginHorizontal="20dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:textColor="@color/dark_blue"
+            android:fontFamily="@font/regular"
+            android:textStyle="bold"
+            android:visibility="gone"
+            android:id="@+id/txtPriceDescription"
+            android:textSize="17sp"/>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:id="@+id/layoutAddRemove"
+            android:layout_marginEnd="10dp"
+            android:visibility="visible"
+            app:layout_constraintTop_toBottomOf="@+id/txtPriceDescription"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginBottom="10dp"
+            >
+
+            <ImageButton
+                android:id="@+id/btnRemove"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_alignParentStart="true"
+                android:background="@drawable/grey_circle"
+                android:backgroundTint="@null"
+                android:src="@drawable/ic_round_remove_24" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/txtQuantity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/btnRemove"
+                android:fontFamily="@font/regular"
+                android:padding="10dp"
+                android:text="0"
+                android:textColor="@color/dark_blue"
+                android:textSize="13sp" />
+
+            <ImageButton
+                android:id="@+id/btnAdd"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_toEndOf="@+id/txtQuantity"
+                android:background="@drawable/green_circle"
+                android:backgroundTint="@null"
+                android:src="@drawable/ic_round_add_24" />
+        </RelativeLayout>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Add to Cart"
+            app:layout_constraintTop_toBottomOf="@+id/layoutAddRemove"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginBottom="10dp"
+            android:id="@+id/btnAddToCart"
+            android:enabled="false"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginTop="5dp"
+            android:backgroundTint="@color/md_grey_500"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -1,5 +1,7 @@
 package com.aks.mygrocery.utils
 
+import com.aks.mygrocery.models.ProductModel
+
 object Constants {
     const val USER_ID="userId"
     const val USERNAME="username"
@@ -10,4 +12,6 @@ object Constants {
     const val IS_LOGIN_DONE="isLogin"
     const val IS_PROFILE_DONE="isProfile"
     const val TYPE="type"
+
+    var productList : ArrayList<ProductModel>?=null
 }
