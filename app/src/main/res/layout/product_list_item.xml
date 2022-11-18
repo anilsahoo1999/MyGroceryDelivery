@@ -25,6 +25,17 @@
             android:layout_marginTop="10dp"
             android:src="@drawable/supermarket"/>
 
+        <ImageView
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:backgroundTint="@null"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:padding="10dp"
+            android:id="@+id/btnFavorite"
+            android:src="@drawable/ic_favorite_outlined"/>
+
+
         <com.google.android.material.textview.MaterialTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -73,7 +84,7 @@
             android:layout_marginBottom="10dp"
             android:paddingHorizontal="5dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:textColor="@color/black"
+            android:textColor="@color/dark_blue"
             android:fontFamily="@font/regular"/>
 
         <ImageButton
@@ -89,7 +100,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginEnd="10dp"
-            app:layout_constraintTop_toTopOf="@+id/productPrice"/>
+            app:layout_constraintTop_toTopOf="@+id/productPrice"
+            app:tint="@color/white" />
 
         <RelativeLayout
             android:layout_width="wrap_content"

@@ -17,14 +17,12 @@ import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.Button
-import android.widget.ImageButton
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.aks.mygrocery.R
 import com.aks.mygrocery.adapter.BannerAdapter
@@ -32,16 +30,17 @@ import com.aks.mygrocery.adapter.CategoryAdapter
 import com.aks.mygrocery.adapter.PriceAdapter
 import com.aks.mygrocery.adapter.ProductAdapter
 import com.aks.mygrocery.app.MyGroceryApp
+import com.aks.mygrocery.base.BaseActivity
 import com.aks.mygrocery.base.BaseFragment
 import com.aks.mygrocery.databinding.FragmentHomeBinding
-import com.aks.mygrocery.models.BannerModel
-import com.aks.mygrocery.models.CategoryModel
-import com.aks.mygrocery.models.ProductModel
+import com.aks.mygrocery.models.*
 import com.aks.mygrocery.utils.Constants
 import com.aks.mygrocery.utils.HorizontalMarginItemDecoration
+import com.aks.mygrocery.utils.SharedPreference
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -65,12 +64,21 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     private var categoryList: List<CategoryModel>? = null
     private var productList: List<ProductModel>? = null
     private var colorList: ArrayList<Int>? = null
+    private lateinit var sharedPreference: SharedPreference
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        (activity as BaseActivity).binding.bottomNavView.visibility = View.VISIBLE
         initializeView()
 
 
+    }
+
+    @SuppressLint("SetTextI18n")
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        sharedPreference = SharedPreference(requireContext())
+        getAllCartProduct()
     }
 
     @SuppressLint("SetTextI18n")
@@ -78,7 +86,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
 
         fusedLocationProvider = LocationServices.getFusedLocationProviderClient(requireActivity())
         geocoder = Geocoder(requireActivity(), Locale.getDefault())
-
+        binding.txtUserName.text = "Hi, ${sharedPreference.fetchDetailsFromSharedPref(Constants.USERNAME)
+            ?.split(" ")?.get(0) ?: "User"} !"
         getCurrentLocation()
         binding.txtYourLocation.setOnClickListener {
             getCurrentLocation()
@@ -122,6 +131,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         binding.bannerViewPager.offscreenPageLimit = 1
 
         binding.bannerViewPager.setCurrentItem(0, true)
+        binding.txtCartCount.text = cartList.size.toString()
 
         /*        val nextItemVisiblePx = 80
         val currentItemHorizontalMarginPx = 50
@@ -135,16 +145,21 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         }*/
         val itemDecoration = HorizontalMarginItemDecoration()
 //        binding.bannerViewPager.addItemDecoration(itemDecoration)
+
+        binding.btnCart.setOnClickListener {
+            findNavController().navigate(R.id.action_homeFragment_to_cartFragment)
+        }
         autoScrollPosition()
         getAllCategory()
         getAllProduct()
 
         productAdapter.onItemClickListener { productModel, i ->
             //open price list bottom sheet dialog
-
+            var isPriceSelected = false
+            var selectedPrice : PricePerKgModel?=null
             val bottomSheetDialog = BottomSheetDialog(requireActivity(), R.style.TransparentDialog)
-            val view =
-                LayoutInflater.from(requireContext()).inflate(R.layout.layout_add_to_cart, null)
+            val view = LayoutInflater.from(requireContext()).inflate(R.layout.layout_add_to_cart, null)
+
             bottomSheetDialog.setContentView(view)
             bottomSheetDialog.setCancelable(false)
             bottomSheetDialog.setCanceledOnTouchOutside(true)
@@ -155,6 +170,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
             val btnAddToCart: Button = view.findViewById(R.id.btnAddToCart)
             val txtQuantity: TextView = view.findViewById(R.id.txtQuantity)
             val txtPriceDescription: TextView = view.findViewById(R.id.txtPriceDescription)
+            val progressBar : ProgressBar = view.findViewById(R.id.progressBar)
 
             textProductName.text = productModel.name
             recyclerView.adapter = priceAdapter
@@ -163,10 +179,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
 
             priceAdapter.onItemClickListener { pricePerKgModel, i ->
                 txtPriceDescription.visibility = View.VISIBLE
+                isPriceSelected = true
+                selectedPrice = pricePerKgModel
                 if (pricePerKgModel.gram == "Unit") {
                     txtPriceDescription.text = "Per Unit Price"
                 } else {
-                    txtPriceDescription.text = "Quantity ${pricePerKgModel.gram}"
+                    txtPriceDescription.text = "Quantity ${pricePerKgModel.gram} Price"
                 }
             }
 
@@ -196,6 +214,45 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
                         btnAddToCart.setBackgroundColor(ContextCompat.getColor(requireContext(),R.color.md_grey_400))
                     }
                     txtQuantity.text = (txtQuantity.text.toString().toInt() - 1).toString()
+                }
+            }
+
+            btnAddToCart.setOnClickListener {
+                progressBar.visibility = View.VISIBLE
+                btnAddToCart.isEnabled = false
+                btnAddToCart.setBackgroundColor(ContextCompat.getColor(requireContext(),R.color.md_grey_500))
+                if (isPriceSelected && txtQuantity.text.toString().toInt()!=0){
+                    //add to cart
+                    selectedPrice?.let {pricePerKgModel->
+                        val cartItemModel = CartItemModel(productModel.productID+"_${pricePerKgModel.id}",txtQuantity.text.toString().toInt(),productModel,pricePerKgModel)
+                        val db = MyGroceryApp.instance.firebaseFirestore
+                        val currentUser = MyGroceryApp.instance.firebaseAuth.currentUser!!.uid
+                        db.collection("UserMasterDetails")
+                            .document(currentUser)
+                            .collection("CartList")
+                            .document(productModel.productID+"_${pricePerKgModel.id}")
+                            .set(cartItemModel)
+                            .addOnSuccessListener {
+                                cartList.add(cartItemModel)
+                                binding.txtCartCount.text = cartList.size.toString()
+                                progressBar.visibility = View.GONE
+                                bottomSheetDialog.dismiss()
+
+                                Snackbar.make(binding.recyclerBestSeller,"Item added to Cart",Snackbar.LENGTH_SHORT)
+                                    .setAction("Go to cart"){
+                                        findNavController().navigate(R.id.action_homeFragment_to_cartFragment)
+                                    }
+                                    .show()
+
+                            }.addOnFailureListener {
+                                progressBar.visibility = View.GONE
+                                btnAddToCart.isEnabled = true
+                                btnAddToCart.setBackgroundColor(ContextCompat.getColor(requireContext(),R.color.md_green_500))
+                                Toast.makeText(requireContext(),"Unable to add product to cart",Toast.LENGTH_SHORT).show()
+                            }
+                    }
+                }else{
+                    Toast.makeText(requireContext(),"Please select one price",Toast.LENGTH_SHORT).show()
                 }
             }
             bottomSheetDialog.show()
@@ -382,4 +439,26 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
             }
     }
 
+    private fun getAllCartProduct(){
+        val db = MyGroceryApp.instance.firebaseFirestore
+        val currentUser = MyGroceryApp.instance.firebaseAuth.currentUser!!.uid
+        db.collection("UserMasterDetails")
+            .document(currentUser)
+            .collection("CartList")
+            .get().addOnSuccessListener { documentSnapshot->
+                if (!documentSnapshot.isEmpty){
+                    cartList = documentSnapshot.toObjects(CartItemModel::class.java) as ArrayList<CartItemModel>
+                    binding.txtCartCount.text = cartList.size.toString()
+                }else{
+                    binding.txtCartCount.text = "0"
+                }
+            }.addOnFailureListener {
+                binding.txtCartCount.text = "0"
+                Toast.makeText(requireContext(),"Unable to get Cart item",Toast.LENGTH_SHORT).show()
+            }
+    }
+
+    companion object{
+        var cartList = arrayListOf<CartItemModel>()
+    }
 }
