@@ -6,6 +6,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/background_color"
         >
 
         <RelativeLayout
@@ -27,11 +28,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/imageIcon"
-                android:fontFamily="@font/regular"
                 android:layout_marginTop="10dp"
+                android:fontFamily="@font/regular"
                 android:gravity="center"
                 android:text="@string/my_grocery"
-                android:textColor="@color/cover_color"
+                android:textColor="@color/dark_blue"
                 android:textSize="30sp" />
 
             <com.google.android.material.button.MaterialButton
@@ -46,6 +47,7 @@
                 android:backgroundTint="@color/cover_color"
                 android:fontFamily="@font/regular"
                 android:text="@string/sign_in"
+                android:textColor="@color/dark_blue"
                 app:cornerRadius="5dp" />
 
             <LinearLayout
@@ -130,6 +132,7 @@
                 android:fontFamily="@font/regular"
                 android:text="@string/sign_in_with_facebook"
                 android:textAllCaps="false"
+                android:textColor="@color/dark_blue"
                 app:cornerRadius="5dp" />
 
         </RelativeLayout>

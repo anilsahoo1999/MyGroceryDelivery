@@ -30,20 +30,208 @@
             android:id="@+id/divider"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginHorizontal="30dp"
+            android:layout_marginHorizontal="20dp"
             android:layout_marginTop="10dp"
             android:background="@color/md_grey_400"
             app:layout_constraintTop_toBottomOf="@+id/txtCart" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerCart"
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:layout_marginTop="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/frameLayout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/divider" />
+            app:layout_constraintTop_toBottomOf="@+id/divider">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/constrain1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintVertical_bias="0"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cardView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="20dp"
+                        android:layout_marginBottom="10dp"
+                        android:elevation="2dp"
+                        android:visibility="visible"
+                        app:cardCornerRadius="10dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <com.facebook.shimmer.ShimmerFrameLayout
+                            android:id="@+id/cartItemLoader"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:visibility="visible">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical">
+
+                                <include layout="@layout/cart_item_loader" />
+
+                                <include layout="@layout/cart_item_loader" />
+
+                                <include layout="@layout/cart_item_loader" />
+
+                                <include layout="@layout/cart_item_loader" />
+
+                                <include layout="@layout/cart_item_loader" />
+                            </LinearLayout>
+                        </com.facebook.shimmer.ShimmerFrameLayout>
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/recyclerCart"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:visibility="gone"
+                            android:overScrollMode="never"
+                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                            tools:listitem="@layout/cart_item" />
+
+                        <ImageView
+                            android:id="@+id/imageNoResult"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:padding="100dp"
+                            android:src="@drawable/no_results"
+                            android:visibility="gone" />
+                    </androidx.cardview.widget.CardView>
+
+                    <RelativeLayout
+                        android:id="@+id/linear1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="gone"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <com.airbnb.lottie.LottieAnimationView
+                            android:id="@+id/lottieEmptyCart"
+                            android:layout_width="match_parent"
+                            android:layout_height="150dp"
+                            app:lottie_autoPlay="true"
+                            app:lottie_loop="true"
+                            app:lottie_rawRes="@raw/cart" />
+
+                        <TextView
+                            android:id="@+id/txtEmptyCart"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignBottom="@+id/lottieEmptyCart"
+                            android:layout_alignParentBottom="true"
+                            android:layout_marginTop="50dp"
+                            android:fontFamily="@font/regular"
+                            android:gravity="center_horizontal"
+                            android:padding="10dp"
+                            android:text="Your cart is empty"
+                            android:textColor="@color/dark_blue"
+                            android:textSize="17sp" />
+
+
+                    </RelativeLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:id="@+id/linear2"
+                    android:visibility="gone"
+                    app:layout_constraintVertical_bias="0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/constrain1"
+                    android:orientation="vertical">
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:layout_gravity="center_vertical"
+                        android:gravity="center_vertical"
+                        android:orientation = "horizontal">
+
+                        <ImageView
+                            android:id="@+id/archiveImage"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:padding="10dp"
+                            android:scaleType="center"
+                            android:src="@drawable/ic_round_archive_24"
+                            app:tint="@color/md_grey_400" />
+
+                        <TextView
+                            android:id="@+id/txtSavedForLater"
+                            android:layout_width="wrap_content"
+                            android:layout_height="48dp"
+                            android:layout_alignParentTop="true"
+                            android:layout_alignParentBottom="true"
+                            android:layout_toEndOf="@+id/archiveImage"
+                            android:fontFamily="@font/regular"
+                            android:gravity="center_vertical"
+                            android:padding="10dp"
+                            android:text="Saved for later"
+                            android:textColor="@color/dark_blue"
+                            android:textSize="17sp" />
+
+                        <TextView
+                            android:id="@+id/txtSavedForLaterCount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="48dp"
+                            android:layout_alignParentTop="true"
+                            android:layout_alignParentBottom="true"
+                            android:layout_toEndOf="@+id/txtSavedForLater"
+                            android:fontFamily="@font/regular"
+                            android:padding="10dp"
+                            android:gravity="center_vertical"
+                            android:text="(0)"
+                            android:textColor="@color/dark_blue"
+                            android:textSize="17sp" />
+                    </RelativeLayout>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cardView2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="20dp"
+                        android:layout_marginBottom="10dp"
+                        android:elevation="2dp"
+                        android:visibility="gone"
+                        app:cardCornerRadius="10dp">
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/recyclerSaveForLater"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:visibility="visible"
+                            android:overScrollMode="never"
+                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                            tools:listitem="@layout/cart_item_saved_later" />
+                    </androidx.cardview.widget.CardView>
+
+
+                </LinearLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </androidx.core.widget.NestedScrollView>
+
 
         <FrameLayout
             android:id="@+id/frameLayout"
@@ -51,6 +239,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:orientation="horizontal"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
@@ -62,7 +251,8 @@
                 android:layout_marginHorizontal="20dp"
                 android:backgroundTint="@color/md_green_500"
                 android:text="Go to Checkout"
-                android:textAllCaps="false" />
+                android:textAllCaps="false"
+                android:textColor="@color/pure_white" />
 
         </FrameLayout>
 
@@ -71,9 +261,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="50dp"
-            android:text="\u20B9 100"
             android:padding="5dp"
-            android:textColor="@color/white"
+            android:text="\u20B9 0"
+            android:textColor="@color/pure_white"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@id/frameLayout"
             app:layout_constraintEnd_toEndOf="@id/frameLayout"
             app:layout_constraintTop_toTopOf="@id/frameLayout" />

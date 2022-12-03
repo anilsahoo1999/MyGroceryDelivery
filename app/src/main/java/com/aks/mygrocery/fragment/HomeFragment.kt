@@ -5,8 +5,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Color
-import android.graphics.Rect
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
@@ -41,11 +39,11 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.lang.Math.abs
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -78,16 +76,47 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         sharedPreference = SharedPreference(requireContext())
-        getAllCartProduct()
+
+        getFCMToken()
     }
+
+
+    private fun getFCMToken() {
+        MyGroceryApp.instance.firebaseMessaging.token.addOnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                return@addOnCompleteListener
+            }
+            val token = task.result
+            uploadToServer(token)
+        }
+    }
+
+    private fun uploadToServer(token: String) {
+
+        val uid = MyGroceryApp.instance.firebaseAuth.currentUser!!.uid
+        val fcmModel = FcmTokenModel(token, uid, "all")
+        MyGroceryApp.instance.firebaseFirestore.collection("PushNotificationIDAdminWise")
+            .document("bcI5ARwAoHMLLQGdIXlHILEnlZ63")
+            .collection("FCMToken")
+            .document(uid)
+            .set(fcmModel)
+            .addOnSuccessListener {
+                Log.e("TAG", "sendRegistrationToServer: Saved Successfully")
+            }.addOnFailureListener {
+                Log.e("TAG", "sendRegistrationToServer: ${it.localizedMessage}")
+            }
+    }
+
 
     @SuppressLint("SetTextI18n")
     private fun initializeView() {
 
         fusedLocationProvider = LocationServices.getFusedLocationProviderClient(requireActivity())
         geocoder = Geocoder(requireActivity(), Locale.getDefault())
-        binding.txtUserName.text = "Hi, ${sharedPreference.fetchDetailsFromSharedPref(Constants.USERNAME)
-            ?.split(" ")?.get(0) ?: "User"} !"
+        binding.txtUserName.text = "Hi, ${
+            sharedPreference.fetchDetailsFromSharedPref(Constants.USERNAME)
+                ?.split(" ")?.get(0) ?: "User"
+        } !"
         getCurrentLocation()
         binding.txtYourLocation.setOnClickListener {
             getCurrentLocation()
@@ -102,6 +131,14 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         colorList?.add(R.color.md_lime_100)
         colorList?.add(R.color.md_red_100)
         colorList?.add(R.color.md_teal_200)
+        colorList?.add(R.color.md_amber_100)
+        colorList?.add(R.color.md_cyan_100)
+        colorList?.add(R.color.md_lime_100)
+        colorList?.add(R.color.md_red_100)
+        colorList?.add(R.color.md_teal_200)
+        colorList?.add(R.color.md_amber_100)
+        colorList?.add(R.color.md_cyan_100)
+
 
 
         repeat(2) {
@@ -133,6 +170,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         binding.bannerViewPager.setCurrentItem(0, true)
         binding.txtCartCount.text = cartList.size.toString()
 
+        getAllCartProduct()
+
         /*        val nextItemVisiblePx = 80
         val currentItemHorizontalMarginPx = 50
         val pageTranslationX = nextItemVisiblePx + currentItemHorizontalMarginPx
@@ -156,9 +195,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         productAdapter.onItemClickListener { productModel, i ->
             //open price list bottom sheet dialog
             var isPriceSelected = false
-            var selectedPrice : PricePerKgModel?=null
+            var selectedPrice: PricePerKgModel? = null
             val bottomSheetDialog = BottomSheetDialog(requireActivity(), R.style.TransparentDialog)
-            val view = LayoutInflater.from(requireContext()).inflate(R.layout.layout_add_to_cart, null)
+            val view =
+                LayoutInflater.from(requireContext()).inflate(R.layout.layout_add_to_cart, null)
 
             bottomSheetDialog.setContentView(view)
             bottomSheetDialog.setCancelable(false)
@@ -170,7 +210,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
             val btnAddToCart: Button = view.findViewById(R.id.btnAddToCart)
             val txtQuantity: TextView = view.findViewById(R.id.txtQuantity)
             val txtPriceDescription: TextView = view.findViewById(R.id.txtPriceDescription)
-            val progressBar : ProgressBar = view.findViewById(R.id.progressBar)
+            val progressBar: ProgressBar = view.findViewById(R.id.progressBar)
 
             textProductName.text = productModel.name
             recyclerView.adapter = priceAdapter
@@ -189,7 +229,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
             }
 
             btnAdd.setOnClickListener {
-                if (txtQuantity.text.toString().toInt()<=9) {
+                if (txtQuantity.text.toString().toInt() <= 9) {
                     txtQuantity.text = (txtQuantity.text.toString().toInt() + 1).toString()
                     btnAddToCart.isEnabled = true
                     btnRemove.isEnabled = true
@@ -200,46 +240,74 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
                         )
                     )
                     btnRemove.setBackgroundResource(R.drawable.red_circle)
-                }else{
-                    Toast.makeText(requireContext(),"Maximum Item per order is 10",Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(
+                        requireContext(),
+                        "Maximum Item per order is 10",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
 
             btnRemove.setOnClickListener {
-                if (txtQuantity.text.toString().toInt()>0){
-                    if (txtQuantity.text.toString().toInt() == 1){
+                if (txtQuantity.text.toString().toInt() > 0) {
+                    if (txtQuantity.text.toString().toInt() == 1) {
                         btnRemove.isEnabled = false
                         btnAddToCart.isEnabled = false
                         btnRemove.setBackgroundResource(R.drawable.grey_circle)
-                        btnAddToCart.setBackgroundColor(ContextCompat.getColor(requireContext(),R.color.md_grey_400))
+                        btnAddToCart.setBackgroundColor(
+                            ContextCompat.getColor(
+                                requireContext(),
+                                R.color.md_grey_400
+                            )
+                        )
                     }
                     txtQuantity.text = (txtQuantity.text.toString().toInt() - 1).toString()
                 }
             }
 
             btnAddToCart.setOnClickListener {
-                progressBar.visibility = View.VISIBLE
-                btnAddToCart.isEnabled = false
-                btnAddToCart.setBackgroundColor(ContextCompat.getColor(requireContext(),R.color.md_grey_500))
-                if (isPriceSelected && txtQuantity.text.toString().toInt()!=0){
+                progressBar.visibility = View.GONE
+                if (isPriceSelected && txtQuantity.text.toString().toInt() != 0) {
                     //add to cart
-                    selectedPrice?.let {pricePerKgModel->
-                        val cartItemModel = CartItemModel(productModel.productID+"_${pricePerKgModel.id}",txtQuantity.text.toString().toInt(),productModel,pricePerKgModel)
+                    selectedPrice?.let { pricePerKgModel ->
+                        val cartItemModel = CartItemModel(
+                            productModel.productID + "_${pricePerKgModel.id}",
+                            txtQuantity.text.toString().toInt(),
+                            (txtQuantity.text.toString()
+                                .toInt() * pricePerKgModel.price!!.replace(" Rs", "")
+                                .toInt()).toString(),
+                            productModel,
+                            pricePerKgModel
+                        )
+                        progressBar.visibility = View.VISIBLE
+                        btnAddToCart.isEnabled = false
+                        btnAddToCart.setBackgroundColor(
+                            ContextCompat.getColor(
+                                requireContext(),
+                                R.color.md_grey_500
+                            )
+                        )
                         val db = MyGroceryApp.instance.firebaseFirestore
                         val currentUser = MyGroceryApp.instance.firebaseAuth.currentUser!!.uid
                         db.collection("UserMasterDetails")
                             .document(currentUser)
                             .collection("CartList")
-                            .document(productModel.productID+"_${pricePerKgModel.id}")
+                            .document(productModel.productID + "_${pricePerKgModel.id}")
                             .set(cartItemModel)
                             .addOnSuccessListener {
                                 cartList.add(cartItemModel)
                                 binding.txtCartCount.text = cartList.size.toString()
                                 progressBar.visibility = View.GONE
+                                btnAddToCart.isEnabled = true
                                 bottomSheetDialog.dismiss()
 
-                                Snackbar.make(binding.recyclerBestSeller,"Item added to Cart",Snackbar.LENGTH_SHORT)
-                                    .setAction("Go to cart"){
+                                Snackbar.make(
+                                    binding.recyclerBestSeller,
+                                    "Item added to Cart",
+                                    Snackbar.LENGTH_SHORT
+                                )
+                                    .setAction("Go to cart") {
                                         findNavController().navigate(R.id.action_homeFragment_to_cartFragment)
                                     }
                                     .show()
@@ -247,15 +315,41 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
                             }.addOnFailureListener {
                                 progressBar.visibility = View.GONE
                                 btnAddToCart.isEnabled = true
-                                btnAddToCart.setBackgroundColor(ContextCompat.getColor(requireContext(),R.color.md_green_500))
-                                Toast.makeText(requireContext(),"Unable to add product to cart",Toast.LENGTH_SHORT).show()
+                                btnAddToCart.setBackgroundColor(
+                                    ContextCompat.getColor(
+                                        requireContext(),
+                                        R.color.md_green_500
+                                    )
+                                )
+                                Toast.makeText(
+                                    requireContext(),
+                                    "Unable to add product to cart",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             }
                     }
-                }else{
-                    Toast.makeText(requireContext(),"Please select one price",Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(requireContext(), "Please select one price", Toast.LENGTH_SHORT)
+                        .show()
                 }
             }
             bottomSheetDialog.show()
+        }
+
+        performOnClickEvent()
+    }
+
+    private fun performOnClickEvent(){
+        binding.txtCategoriesSeeAll.setOnClickListener {
+            MyGroceryApp.instance.firebaseMessaging.subscribeToTopic("offer")
+                .addOnCompleteListener { task ->
+                    var msg = "Subscribed"
+                    if (!task.isSuccessful) {
+                        msg = "Subscribe failed"
+                    }
+                    Log.d("TAG", msg)
+                    Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
+                }
         }
     }
 
@@ -389,76 +483,97 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
 
     private fun getAllCategory() {
         binding.categoryShimmer.startShimmer()
-        val firebaseDb = MyGroceryApp.instance.firebaseFirestore
-        firebaseDb.collection("AdminMasterDetails").document("bcI5ARwAoHMLLQGdIXlHILEnlZ63")
-            .collection("CategoryList").get().addOnSuccessListener { documentSnapshot ->
-                categoryList = arrayListOf()
-                categoryList = documentSnapshot.toObjects(CategoryModel::class.java)
-                if (categoryList?.size!! > 0) {
-                    binding.categoryShimmer.stopShimmer()
-                    categoryAdapter = CategoryAdapter(
-                        categoryList as List<CategoryModel>,
-                        colorList!!
-                    )
-                    binding.categoryShimmer.visibility = View.INVISIBLE
-                    binding.recyclerCategory.visibility = View.VISIBLE
-                    binding.recyclerCategory.adapter = categoryAdapter
+        viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
+            val firebaseDb = MyGroceryApp.instance.firebaseFirestore
+            firebaseDb.collection("AdminMasterDetails").document("bcI5ARwAoHMLLQGdIXlHILEnlZ63")
+                .collection("CategoryList").get().addOnSuccessListener { documentSnapshot ->
+                    CoroutineScope(Dispatchers.IO).launch {
+                        categoryList = arrayListOf()
+                        categoryList = documentSnapshot.toObjects(CategoryModel::class.java)
+                        if (categoryList?.size!! > 0) {
+                            withContext(Dispatchers.Main) {
+                                binding.categoryShimmer.stopShimmer()
+                                categoryAdapter = CategoryAdapter(
+                                    categoryList as List<CategoryModel>,
+                                    colorList!!
+                                )
+                                binding.categoryShimmer.visibility = View.INVISIBLE
+                                binding.recyclerCategory.visibility = View.VISIBLE
+                                binding.recyclerCategory.adapter = categoryAdapter
+                            }
+                        }
+                    }
+                }.addOnFailureListener {
+                    Toast.makeText(requireContext(), it.message.toString(), Toast.LENGTH_SHORT)
+                        .show()
                 }
-            }.addOnFailureListener {
-                Toast.makeText(requireContext(), it.message.toString(), Toast.LENGTH_SHORT).show()
-            }
+        }
     }
 
     private fun getAllProduct() {
         binding.productShimmer.startShimmer()
-        val firebaseDb = MyGroceryApp.instance.firebaseFirestore
-        firebaseDb.collection("AdminMasterDetails")
-            .document("bcI5ARwAoHMLLQGdIXlHILEnlZ63")
-            .collection("ProductList")
+        viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
+            val firebaseDb = MyGroceryApp.instance.firebaseFirestore
+            firebaseDb.collection("AdminMasterDetails")
+                .document("bcI5ARwAoHMLLQGdIXlHILEnlZ63")
+                .collection("ProductList")
 //            .whereEqualTo("sellingFast", true)
 //            .whereEqualTo("productOutOfStock",false)
-            .get().addOnSuccessListener { documentSnapshot ->
-
-                productList = arrayListOf()
-                productList = documentSnapshot.toObjects(ProductModel::class.java)
-                Constants.productList =
-                    productList as ArrayList<ProductModel> /* = java.util.ArrayList<com.aks.mygrocery.models.ProductModel> */
-                if (productList?.size!! > 0) {
+                .get().addOnSuccessListener { documentSnapshot ->
+                    CoroutineScope(Dispatchers.IO).launch {
+                        productList = arrayListOf()
+                        productList = documentSnapshot.toObjects(ProductModel::class.java)
+                        Constants.productList =
+                            productList as ArrayList<ProductModel> /* = java.util.ArrayList<com.aks.mygrocery.models.ProductModel> */
+                        if (productList?.size!! > 0) {
+                            withContext(Dispatchers.Main) {
+                                binding.productShimmer.stopShimmer()
+                                productAdapter.differ.submitList(productList)
+                                binding.productShimmer.visibility = View.GONE
+                                binding.recyclerBestSeller.visibility = View.VISIBLE
+                                binding.recyclerBestSeller.adapter = productAdapter
+                            }
+                        }
+                    }
+                }.addOnFailureListener {
                     binding.productShimmer.stopShimmer()
-                    productAdapter.differ.submitList(productList)
                     binding.productShimmer.visibility = View.GONE
-                    binding.recyclerBestSeller.visibility = View.VISIBLE
-                    binding.recyclerBestSeller.adapter = productAdapter
-
-
+                    Toast.makeText(requireContext(), it.message.toString(), Toast.LENGTH_SHORT)
+                        .show()
                 }
-            }.addOnFailureListener {
-                binding.productShimmer.stopShimmer()
-                binding.productShimmer.visibility = View.GONE
-                Toast.makeText(requireContext(), it.message.toString(), Toast.LENGTH_SHORT).show()
-            }
+        }
     }
 
-    private fun getAllCartProduct(){
-        val db = MyGroceryApp.instance.firebaseFirestore
-        val currentUser = MyGroceryApp.instance.firebaseAuth.currentUser!!.uid
-        db.collection("UserMasterDetails")
-            .document(currentUser)
-            .collection("CartList")
-            .get().addOnSuccessListener { documentSnapshot->
-                if (!documentSnapshot.isEmpty){
-                    cartList = documentSnapshot.toObjects(CartItemModel::class.java) as ArrayList<CartItemModel>
-                    binding.txtCartCount.text = cartList.size.toString()
-                }else{
+    private fun getAllCartProduct() {
+        viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
+            val db = MyGroceryApp.instance.firebaseFirestore
+            val currentUser = MyGroceryApp.instance.firebaseAuth.currentUser!!.uid
+            db.collection("UserMasterDetails")
+                .document(currentUser)
+                .collection("CartList")
+                .get().addOnSuccessListener { documentSnapshot ->
+                    CoroutineScope(Dispatchers.IO).launch {
+                        if (!documentSnapshot.isEmpty) {
+                            cartList =
+                                documentSnapshot.toObjects(CartItemModel::class.java) as ArrayList<CartItemModel>
+                            withContext(Dispatchers.Main) {
+                                binding.txtCartCount.text = cartList.size.toString()
+                            }
+                        } else {
+                            withContext(Dispatchers.Main) {
+                                binding.txtCartCount.text = "0"
+                            }
+                        }
+                    }
+                }.addOnFailureListener {
                     binding.txtCartCount.text = "0"
+                    Toast.makeText(requireContext(), "Unable to get Cart item", Toast.LENGTH_SHORT)
+                        .show()
                 }
-            }.addOnFailureListener {
-                binding.txtCartCount.text = "0"
-                Toast.makeText(requireContext(),"Unable to get Cart item",Toast.LENGTH_SHORT).show()
-            }
+        }
     }
 
-    companion object{
+    companion object {
         var cartList = arrayListOf<CartItemModel>()
     }
 }

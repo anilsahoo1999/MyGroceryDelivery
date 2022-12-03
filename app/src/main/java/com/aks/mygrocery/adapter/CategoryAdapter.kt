@@ -37,7 +37,7 @@ class CategoryAdapter(private val list: List<CategoryModel>,private val colorLis
 
     override fun getItemCount(): Int {
         return if(list.size>4){
-            4
+            10
         }else{
             list.size
         }

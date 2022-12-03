@@ -46,7 +46,7 @@
             android:id="@+id/recyclerPrice"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:spanCount="3"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             tools:listitem="@layout/layout_price_view"
             app:layout_constraintTop_toBottomOf="@+id/txtAvailablePrice"
             android:layout_marginHorizontal="10dp"

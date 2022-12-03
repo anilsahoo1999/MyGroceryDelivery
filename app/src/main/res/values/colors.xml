@@ -6,16 +6,21 @@
     <color name="dip_red">#ff3300</color>
     <color name="cover_color">#134563</color>
     <color name="grey">#8c8c8c</color>
+    <color name="background_color">#f2f2f2</color>
 
 
     <color name="black">#FF000000</color>
+    <color name="pure_black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="pure_white">#FFFFFFFF</color>
+    <color name="off_white">#FAFAFA</color>
     <color name="orange">#FF5722</color>
     <color name="yellow_orange">#FF9800</color>
     <color name="purpleBlack">#360040</color>
     <color name="red">#FF0000</color>
     <color name="green">#1CA822</color>
     <color name="dark_blue">#405467</color>
+    <color name="pure_dark_blue">#405467</color>
 
 
 

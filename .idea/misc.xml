@@ -7,6 +7,7 @@
         <entry key="..\:/AndroidStudioProject/KotlinProject/MyGroceryDelivery/app/src/main/res/drawable/background_rounded_red.xml" value="0.121" />
         <entry key="..\:/AndroidStudioProject/KotlinProject/MyGroceryDelivery/app/src/main/res/drawable/bottomsheet_background.xml" value="0.121" />
         <entry key="..\:/AndroidStudioProject/KotlinProject/MyGroceryDelivery/app/src/main/res/drawable/btn_grey_complete_round.xml" value="0.121" />
+        <entry key="..\:/AndroidStudioProject/KotlinProject/MyGroceryDelivery/app/src/main/res/drawable/btn_grey_complete_rounded_selector.xml" value="0.164" />
         <entry key="..\:/AndroidStudioProject/KotlinProject/MyGroceryDelivery/app/src/main/res/drawable/btn_grey_normal_rounded.xml" value="0.121" />
         <entry key="..\:/AndroidStudioProject/KotlinProject/MyGroceryDelivery/app/src/main/res/drawable/btn_grey_pressed_complete_round.xml" value="0.121" />
         <entry key="..\:/AndroidStudioProject/KotlinProject/MyGroceryDelivery/app/src/main/res/drawable/btn_grey_rounded_selector.xml" value="0.121" />
@@ -16,11 +17,13 @@
         <entry key="..\:/AndroidStudioProject/KotlinProject/MyGroceryDelivery/app/src/main/res/drawable/btn_pressed_rounded.xml" value="0.121" />
         <entry key="..\:/AndroidStudioProject/KotlinProject/MyGroceryDelivery/app/src/main/res/drawable/green_circle.xml" value="0.121" />
         <entry key="..\:/AndroidStudioProject/KotlinProject/MyGroceryDelivery/app/src/main/res/drawable/grey_circle.xml" value="0.121" />
+        <entry key="..\:/AndroidStudioProject/KotlinProject/MyGroceryDelivery/app/src/main/res/drawable/ic_cancel_close_svgrepo_com.xml" value="0.152" />
         <entry key="..\:/AndroidStudioProject/KotlinProject/MyGroceryDelivery/app/src/main/res/drawable/ic_favorite_outlined.xml" value="0.3875" />
         <entry key="..\:/AndroidStudioProject/KotlinProject/MyGroceryDelivery/app/src/main/res/drawable/ic_favorite_svgrepo_com.xml" value="0.3875" />
         <entry key="..\:/AndroidStudioProject/KotlinProject/MyGroceryDelivery/app/src/main/res/drawable/ic_line_svgrepo_com.xml" value="0.121" />
         <entry key="..\:/AndroidStudioProject/KotlinProject/MyGroceryDelivery/app/src/main/res/drawable/ic_profile.xml" value="0.1435" />
         <entry key="..\:/AndroidStudioProject/KotlinProject/MyGroceryDelivery/app/src/main/res/drawable/ic_round_home_24.xml" value="0.1435" />
+        <entry key="..\:/AndroidStudioProject/KotlinProject/MyGroceryDelivery/app/src/main/res/drawable/ic_round_remove_24.xml" value="0.152" />
         <entry key="..\:/AndroidStudioProject/KotlinProject/MyGroceryDelivery/app/src/main/res/drawable/ic_round_shopping_cart_24.xml" value="0.158" />
         <entry key="..\:/AndroidStudioProject/KotlinProject/MyGroceryDelivery/app/src/main/res/drawable/onboarding_selected_dot.xml" value="0.121" />
         <entry key="..\:/AndroidStudioProject/KotlinProject/MyGroceryDelivery/app/src/main/res/drawable/onboarding_unselected_dot.xml" value="0.121" />
@@ -38,19 +41,24 @@
         <entry key="..\:/AndroidStudioProject/KotlinProject/MyGroceryDelivery/app/src/main/res/layout/activity_on_boarding.xml" value="0.16354166666666667" />
         <entry key="..\:/AndroidStudioProject/KotlinProject/MyGroceryDelivery/app/src/main/res/layout/activity_splash_screen.xml" value="0.22" />
         <entry key="..\:/AndroidStudioProject/KotlinProject/MyGroceryDelivery/app/src/main/res/layout/banner_list_item.xml" value="0.1625" />
+        <entry key="..\:/AndroidStudioProject/KotlinProject/MyGroceryDelivery/app/src/main/res/layout/cart_item.xml" value="0.5385416666666667" />
+        <entry key="..\:/AndroidStudioProject/KotlinProject/MyGroceryDelivery/app/src/main/res/layout/cart_item_loader.xml" value="0.1625" />
+        <entry key="..\:/AndroidStudioProject/KotlinProject/MyGroceryDelivery/app/src/main/res/layout/cart_item_saved_later.xml" value="0.1" />
         <entry key="..\:/AndroidStudioProject/KotlinProject/MyGroceryDelivery/app/src/main/res/layout/category_item_layout.xml" value="0.16354166666666667" />
         <entry key="..\:/AndroidStudioProject/KotlinProject/MyGroceryDelivery/app/src/main/res/layout/category_item_loader.xml" value="0.16354166666666667" />
-        <entry key="..\:/AndroidStudioProject/KotlinProject/MyGroceryDelivery/app/src/main/res/layout/fragment_cart.xml" value="0.5385416666666667" />
-        <entry key="..\:/AndroidStudioProject/KotlinProject/MyGroceryDelivery/app/src/main/res/layout/fragment_home.xml" value="0.40390625" />
+        <entry key="..\:/AndroidStudioProject/KotlinProject/MyGroceryDelivery/app/src/main/res/layout/fragment_cart.xml" value="0.15914850481500253" />
+        <entry key="..\:/AndroidStudioProject/KotlinProject/MyGroceryDelivery/app/src/main/res/layout/fragment_home.xml" value="0.16354166666666667" />
         <entry key="..\:/AndroidStudioProject/KotlinProject/MyGroceryDelivery/app/src/main/res/layout/fragment_on_boarding.xml" value="0.16354166666666667" />
         <entry key="..\:/AndroidStudioProject/KotlinProject/MyGroceryDelivery/app/src/main/res/layout/fragment_order.xml" value="0.16354166666666667" />
         <entry key="..\:/AndroidStudioProject/KotlinProject/MyGroceryDelivery/app/src/main/res/layout/fragment_profile.xml" value="0.16354166666666667" />
-        <entry key="..\:/AndroidStudioProject/KotlinProject/MyGroceryDelivery/app/src/main/res/layout/layout_add_to_cart.xml" value="0.5385416666666667" />
-        <entry key="..\:/AndroidStudioProject/KotlinProject/MyGroceryDelivery/app/src/main/res/layout/layout_price_view.xml" value="0.5385416666666667" />
+        <entry key="..\:/AndroidStudioProject/KotlinProject/MyGroceryDelivery/app/src/main/res/layout/layout_add_to_cart.xml" value="0.16354166666666667" />
+        <entry key="..\:/AndroidStudioProject/KotlinProject/MyGroceryDelivery/app/src/main/res/layout/layout_price_view.xml" value="0.16354166666666667" />
         <entry key="..\:/AndroidStudioProject/KotlinProject/MyGroceryDelivery/app/src/main/res/layout/loading_dialog.xml" value="0.16354166666666667" />
+        <entry key="..\:/AndroidStudioProject/KotlinProject/MyGroceryDelivery/app/src/main/res/layout/pop_up_message_dialog.xml" value="0.16354166666666667" />
+        <entry key="..\:/AndroidStudioProject/KotlinProject/MyGroceryDelivery/app/src/main/res/layout/pop_up_message_dialog_two_action.xml" value="0.16354166666666667" />
         <entry key="..\:/AndroidStudioProject/KotlinProject/MyGroceryDelivery/app/src/main/res/layout/price_layout.xml" value="0.16354166666666667" />
         <entry key="..\:/AndroidStudioProject/KotlinProject/MyGroceryDelivery/app/src/main/res/layout/product_item_loader.xml" value="0.1625" />
-        <entry key="..\:/AndroidStudioProject/KotlinProject/MyGroceryDelivery/app/src/main/res/layout/product_list_item.xml" value="0.5385416666666667" />
+        <entry key="..\:/AndroidStudioProject/KotlinProject/MyGroceryDelivery/app/src/main/res/layout/product_list_item.xml" value="0.16354166666666667" />
         <entry key="..\:/AndroidStudioProject/KotlinProject/MyGroceryDelivery/app/src/main/res/layout/profile_fragment.xml" value="0.16666666666666666" />
         <entry key="..\:/AndroidStudioProject/KotlinProject/MyGroceryDelivery/app/src/main/res/menu/app_bar_menu.xml" value="0.16354166666666667" />
       </map>
@@ -61,5 +69,12 @@
   </component>
   <component name="ProjectType">
     <option name="id" value="Android" />
+  </component>
+  <component name="VisualizationToolProject">
+    <option name="state">
+      <ProjectState>
+        <option name="scale" value="0.1625" />
+      </ProjectState>
+    </option>
   </component>
 </project>

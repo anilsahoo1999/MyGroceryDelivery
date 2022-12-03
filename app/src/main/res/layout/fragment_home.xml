@@ -235,6 +235,7 @@
                 android:fontFamily="@font/regular"
                 android:gravity="center_vertical"
                 android:padding="13dp"
+                android:textColor="@color/black"
                 android:text="Search by item name"
                 app:layout_constraintTop_toBottomOf="@+id/txtYourLocation" />
 

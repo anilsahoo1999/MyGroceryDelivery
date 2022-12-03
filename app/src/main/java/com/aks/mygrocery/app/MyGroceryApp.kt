@@ -4,6 +4,7 @@ import android.app.Application
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -15,6 +16,7 @@ class MyGroceryApp : Application(){
     lateinit var firebaseDatabase: FirebaseDatabase
     lateinit var firebaseStorage: FirebaseStorage
     lateinit var firebaseAuth: FirebaseAuth
+    lateinit var firebaseMessaging: FirebaseMessaging
 
     companion object{
         lateinit var instance : MyGroceryApp
@@ -36,6 +38,7 @@ class MyGroceryApp : Application(){
             firebaseFirestore = FirebaseFirestore.getInstance()
             firebaseStorage = FirebaseStorage.getInstance()
             firebaseAuth= FirebaseAuth.getInstance()
+            firebaseMessaging = FirebaseMessaging.getInstance()
         }
     }
 

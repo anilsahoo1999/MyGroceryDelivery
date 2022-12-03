@@ -11,7 +11,11 @@ data class CartItemModel(
 
     @SerializedName("quantity")
     @Expose
-    val quantity: Int? = null,
+    var quantity: Int? = null,
+
+    @SerializedName("totalPrice")
+    @Expose
+    var totalPrice: String? = null,
 
     @SerializedName("productModel")
     @Expose

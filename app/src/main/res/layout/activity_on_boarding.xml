@@ -35,7 +35,7 @@
             android:layout_marginEnd="10dp"
             android:fontFamily="@font/regular"
             android:id="@+id/btnSkip"
-            android:textColor="@color/dark_blue"
+            android:textColor="@color/pure_dark_blue"
             android:background="@drawable/btn_grey_complete_rounded_selector"
             app:backgroundTint="@null"/>
 
@@ -74,7 +74,7 @@
                 android:layout_marginBottom="20dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                android:textColor="@color/dark_blue" />
+                android:textColor="@color/pure_dark_blue" />
 
 
             <com.google.android.material.button.MaterialButton
