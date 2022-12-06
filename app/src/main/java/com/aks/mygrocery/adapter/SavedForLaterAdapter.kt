@@ -59,25 +59,25 @@ class SavedForLaterAdapter : RecyclerView.Adapter<SavedForLaterAdapter.CartViewH
             productName.text = cartItemModel.productModel?.name
             productPrice.text = "\u20B9 ${cartItemModel.totalPrice}"
             txtQuantity.text = cartItemModel.quantity.toString()
-            btnAdd.setOnClickListener {
-                cartItemModel.selectedPrice.let {
-                    if (cartItemModel.quantity!! < 10) {
-                        callBackAdd?.invoke(cartItemModel, position)
-                    }else{
-                        callBackError?.invoke("You can't add more than 10 item")
-                    }
-                }
-            }
+//            btnAdd.setOnClickListener {
+//                cartItemModel.selectedPrice.let {
+//                    if (cartItemModel.quantity!! < 10) {
+//                        callBackAdd?.invoke(cartItemModel, position)
+//                    }else{
+//                        callBackError?.invoke("You can't add more than 10 item")
+//                    }
+//                }
+//            }
 
-            btnRemove.setOnClickListener {
-                cartItemModel.selectedPrice.let {
-                    if (cartItemModel.quantity!! == 1){
-                        callBackDelete?.invoke(cartItemModel, position)
-                    }else{
-                        callBackRemove?.invoke(cartItemModel, position)
-                    }
-                }
-            }
+//            btnRemove.setOnClickListener {
+//                cartItemModel.selectedPrice.let {
+//                    if (cartItemModel.quantity!! == 1){
+//                        callBackDelete?.invoke(cartItemModel, position)
+//                    }else{
+//                        callBackRemove?.invoke(cartItemModel, position)
+//                    }
+//                }
+//            }
 
             btnDeleteProduct.setOnClickListener {
                 cartItemModel.selectedPrice.let {

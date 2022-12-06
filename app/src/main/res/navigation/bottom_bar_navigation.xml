@@ -13,6 +13,12 @@
         <action
             android:id="@+id/action_homeFragment_to_cartFragment"
             app:destination="@id/cartFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_seeAllCategoryFragment"
+            app:destination="@id/seeAllCategoryFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_seeAllProductFragment"
+            app:destination="@id/seeAllProductFragment" />
     </fragment>
     <fragment
         android:id="@+id/orderFragment"
@@ -28,4 +34,20 @@
         android:id="@+id/cartFragment"
         android:name="com.aks.mygrocery.fragment.CartFragment"
         android:label="CartFragment" />
+    <fragment
+        android:id="@+id/seeAllCategoryFragment"
+        android:name="com.aks.mygrocery.fragment.SeeAllCategoryFragment"
+        android:label="SeeAllCategoryFragment" >
+        <action
+            android:id="@+id/action_seeAllCategoryFragment_to_seeAllProductFragment"
+            app:destination="@id/seeAllProductFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/seeAllProductFragment"
+        android:name="com.aks.mygrocery.fragment.SeeAllProductFragment"
+        android:label="SeeAllProductFragment" >
+        <action
+            android:id="@+id/action_seeAllProductFragment_to_cartFragment"
+            app:destination="@id/cartFragment" />
+    </fragment>
 </navigation>

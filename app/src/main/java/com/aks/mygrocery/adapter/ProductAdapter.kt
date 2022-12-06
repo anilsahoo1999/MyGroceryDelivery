@@ -16,7 +16,7 @@ import com.aks.mygrocery.models.CategoryModel
 import com.aks.mygrocery.models.ProductModel
 import com.bumptech.glide.Glide
 
-class ProductAdapter() : RecyclerView.Adapter<ProductAdapter.CategoryViewHolder>() {
+class ProductAdapter : RecyclerView.Adapter<ProductAdapter.CategoryViewHolder>() {
 
     var callBackItemClick : ((ProductModel, Int)->Unit)?=null
 

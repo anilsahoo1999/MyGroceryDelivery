@@ -23,6 +23,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.aks.mygrocery.R
+import com.aks.mygrocery.activity.SearchActivity
 import com.aks.mygrocery.adapter.BannerAdapter
 import com.aks.mygrocery.adapter.CategoryAdapter
 import com.aks.mygrocery.adapter.PriceAdapter
@@ -31,24 +32,28 @@ import com.aks.mygrocery.app.MyGroceryApp
 import com.aks.mygrocery.base.BaseActivity
 import com.aks.mygrocery.base.BaseFragment
 import com.aks.mygrocery.databinding.FragmentHomeBinding
+import com.aks.mygrocery.eventbus.MessageEvent
 import com.aks.mygrocery.models.*
 import com.aks.mygrocery.utils.Constants
+import com.aks.mygrocery.utils.Constants.cartList
 import com.aks.mygrocery.utils.HorizontalMarginItemDecoration
 import com.aks.mygrocery.utils.SharedPreference
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 class HomeFragment : BaseFragment<FragmentHomeBinding>() {
+
     override fun getFragmentId(): Int {
         return R.layout.fragment_home
     }
@@ -59,16 +64,17 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     private lateinit var categoryAdapter: CategoryAdapter
     private lateinit var productAdapter: ProductAdapter
     private lateinit var priceAdapter: PriceAdapter
-    private var categoryList: List<CategoryModel>? = null
+
     private var productList: List<ProductModel>? = null
     private var colorList: ArrayList<Int>? = null
     private lateinit var sharedPreference: SharedPreference
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         (activity as BaseActivity).binding.bottomNavView.visibility = View.VISIBLE
         initializeView()
-
 
     }
 
@@ -92,7 +98,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     }
 
     private fun uploadToServer(token: String) {
-
         val uid = MyGroceryApp.instance.firebaseAuth.currentUser!!.uid
         val fcmModel = FcmTokenModel(token, uid, "all")
         MyGroceryApp.instance.firebaseFirestore.collection("PushNotificationIDAdminWise")
@@ -110,7 +115,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
 
     @SuppressLint("SetTextI18n")
     private fun initializeView() {
-
         fusedLocationProvider = LocationServices.getFusedLocationProviderClient(requireActivity())
         geocoder = Geocoder(requireActivity(), Locale.getDefault())
         binding.txtUserName.text = "Hi, ${
@@ -139,6 +143,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         colorList?.add(R.color.md_amber_100)
         colorList?.add(R.color.md_cyan_100)
 
+        categoryAdapter = CategoryAdapter(colorList!!)
 
 
         repeat(2) {
@@ -191,6 +196,22 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         autoScrollPosition()
         getAllCategory()
         getAllProduct()
+
+
+
+        binding.txtBestSellerSeeAll.setOnClickListener {
+
+        }
+
+        categoryAdapter.onItemClickCallBackListener { categoryModel, i ->
+
+            val bundle = Bundle().apply {
+                putString("CATEGORY_ID", categoryModel.categoryID)
+                putString("CATEGORY_NAME", categoryModel.name)
+            }
+            findNavController().navigate(R.id.action_homeFragment_to_seeAllProductFragment, bundle)
+
+        }
 
         productAdapter.onItemClickListener { productModel, i ->
             //open price list bottom sheet dialog
@@ -337,9 +358,25 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         }
 
         performOnClickEvent()
+
+
+    }
+    override fun onStart() {
+        super.onStart()
+        EventBus.getDefault().register(this)
     }
 
-    private fun performOnClickEvent(){
+    override fun onStop() {
+        EventBus.getDefault().unregister(this)
+        super.onStop()
+    }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public fun onMessageEvent(messageEvent: MessageEvent){
+        binding.txtCartCount.text = messageEvent.cartItemCount.toString()
+        Toast.makeText(requireContext(),messageEvent.cartItemCount.toString(),Toast.LENGTH_SHORT).show()
+    }
+
+    private fun performOnClickEvent() {
         binding.txtCategoriesSeeAll.setOnClickListener {
             MyGroceryApp.instance.firebaseMessaging.subscribeToTopic("offer")
                 .addOnCompleteListener { task ->
@@ -348,8 +385,14 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
                         msg = "Subscribe failed"
                     }
                     Log.d("TAG", msg)
-                    Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
                 }
+            findNavController().navigate(R.id.action_homeFragment_to_seeAllCategoryFragment)
+        }
+
+        binding.txtSearchBar.setOnClickListener {
+            val intent = Intent(requireActivity(),SearchActivity::class.java)
+            requireActivity().startActivity(intent)
+            requireActivity().overridePendingTransition(R.anim.pull_up_from_bottom,0)
         }
     }
 
@@ -488,15 +531,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
             firebaseDb.collection("AdminMasterDetails").document("bcI5ARwAoHMLLQGdIXlHILEnlZ63")
                 .collection("CategoryList").get().addOnSuccessListener { documentSnapshot ->
                     CoroutineScope(Dispatchers.IO).launch {
-                        categoryList = arrayListOf()
-                        categoryList = documentSnapshot.toObjects(CategoryModel::class.java)
-                        if (categoryList?.size!! > 0) {
+                        categoryList =
+                            documentSnapshot.toObjects(CategoryModel::class.java) as ArrayList<CategoryModel> /* = java.util.ArrayList<com.aks.mygrocery.models.CartItemModel> */
+                        if (categoryList.size > 0) {
                             withContext(Dispatchers.Main) {
                                 binding.categoryShimmer.stopShimmer()
-                                categoryAdapter = CategoryAdapter(
-                                    categoryList as List<CategoryModel>,
-                                    colorList!!
-                                )
+                                categoryAdapter.differ.submitList(categoryList)
                                 binding.categoryShimmer.visibility = View.INVISIBLE
                                 binding.recyclerCategory.visibility = View.VISIBLE
                                 binding.recyclerCategory.adapter = categoryAdapter
@@ -574,6 +614,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     }
 
     companion object {
-        var cartList = arrayListOf<CartItemModel>()
+
+        var categoryList = arrayListOf<CategoryModel>()
     }
 }

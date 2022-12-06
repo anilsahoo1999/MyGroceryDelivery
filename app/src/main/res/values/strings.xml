@@ -7,8 +7,6 @@
     <string name="sign_in_with_google">Sign in with Google</string>
     <string name="sign_in_with_facebook">Sign in with Facebook</string>
     <string name="sign_in_with_google_and_facebook">Sign in with Google and Facebook</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="google_client_id">389061846078-ik05qfe340ksmi9i4sjrpihlbfk78vnr.apps.googleusercontent.com</string>
     <string name="google_client_secret_id">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</string>
     <string name="check_network">Please check your internet connection</string>
@@ -30,4 +28,9 @@
     <string name="favorite_products">Favorite Products</string>
     <string name="choose_language">Choose Language</string>
     <string name="available_price">Available Price</string>
+    <string name="back_button">back button</string>
+    <string name="best_sellers">Best Sellers</string>
+    <string name="categories">Categories</string>
+    <string name="hi_anil">Hi, Anil!</string>
+    <string name="add_address">Add Address</string>
 </resources>

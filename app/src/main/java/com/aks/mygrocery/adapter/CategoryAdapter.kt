@@ -7,12 +7,35 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.AsyncListDiffer
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.aks.mygrocery.R
 import com.aks.mygrocery.models.CategoryModel
+import com.aks.mygrocery.models.ProductModel
 import com.bumptech.glide.Glide
 
-class CategoryAdapter(private val list: List<CategoryModel>,private val colorList : List<Int>) : RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>() {
+class CategoryAdapter(private val colorList : List<Int>) : RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>() {
+
+
+    private var itemClickCallBack : ((CategoryModel, Int)->Unit)?=null
+
+    fun onItemClickCallBackListener(callBack : ((CategoryModel,Int)->Unit)){
+        itemClickCallBack = callBack
+    }
+
+    private val diffUtilsCallBack = object : DiffUtil.ItemCallback<CategoryModel>(){
+        override fun areItemsTheSame(oldItem: CategoryModel, newItem: CategoryModel): Boolean {
+            return oldItem.categoryID == newItem.categoryID
+        }
+
+        override fun areContentsTheSame(oldItem: CategoryModel, newItem: CategoryModel): Boolean {
+            return oldItem == newItem
+        }
+
+    }
+
+    val differ = AsyncListDiffer(this,diffUtilsCallBack)
 
 
     inner class CategoryViewHolder(itemView :View) : RecyclerView.ViewHolder(itemView){
@@ -24,6 +47,9 @@ class CategoryAdapter(private val list: List<CategoryModel>,private val colorLis
             categoryName.text = categoryModel.name
             cardView.setCardBackgroundColor(ContextCompat.getColor(cardView.context,colorList[position]))
 
+            cardView.setOnClickListener {
+                itemClickCallBack?.invoke(categoryModel,position)
+            }
         }
     }
 
@@ -32,14 +58,14 @@ class CategoryAdapter(private val list: List<CategoryModel>,private val colorLis
     }
 
     override fun onBindViewHolder(holder: CategoryViewHolder, position: Int) {
-        holder.bind(list[position],position)
+        holder.bind(differ.currentList[position],position)
     }
 
     override fun getItemCount(): Int {
-        return if(list.size>4){
+        return if(differ.currentList.size>4){
             10
         }else{
-            list.size
+            differ.currentList.size
         }
     }
 }

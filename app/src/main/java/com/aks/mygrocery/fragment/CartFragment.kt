@@ -91,7 +91,7 @@ class CartFragment : BaseFragment<FragmentCartBinding>() {
                             }else{
                                 binding.linear1.visibility = View.GONE
                                 binding.frameLayout.visibility = View.VISIBLE
-                                binding.txtTotalPrice.visibility = View.GONE
+                                binding.txtTotalPrice.visibility = View.VISIBLE
                             }
                         }
                         "Negative"->{
@@ -139,15 +139,17 @@ class CartFragment : BaseFragment<FragmentCartBinding>() {
         }
 
         savedForLaterAdapter.onBtnAddToCartClick { cartItemModel, i ->
-            modifySavedForLaterItem(i, cartItemModel)
-
-
 
             cartItemList.add(cartItemModel)
             cartAdapter.differ.submitList(cartItemList)
             cartAdapter.notifyDataSetChanged()
             updateCartItem(cartItemModel)
             calculateCartValue()
+
+
+            modifySavedForLaterItem(i, cartItemModel)
+
+
         }
 
     }
